@@ -25,12 +25,6 @@ function [ d, h ] = binload(filename, range)
     h.scaleFactors = [1,1];
     h.chNames = {'Measured Current','Applied Voltage'};
     
-    % load data, or just return header?
-    if nargin > 1 && strcmp(range,'info')
-        fclose(fid);
-        return;
-    end
-    
     % find the right place to seek, and do so
     if nargin<2
         range = [0 h.numPts];
@@ -44,7 +38,16 @@ function [ d, h ] = binload(filename, range)
     % now read
 %     d16 = fread(fid, sz, '*int16');
     d = fread(fid, sz, 'double')';
+    h.si = d(2,1)-d(1,1); % put timing information into the header
+    
+    % load data, or just return header?
+    if nargin > 1 && strcmp(range,'info')
+        fclose(fid);
+        return;
+    end
+    
     d = d(:,2:end);
+    d(:,1) = d(:,1)/1000; % PoreView works in nA
 
     % all done
     fclose(fid);

@@ -204,7 +204,7 @@ classdef SignalData < handle
             elseif strcmp(obj.ext,'.bin')
                 % binary version
                 
-                obj.si = 1/50000;
+                obj.si = h.si;
                 obj.ndata = h.numPts - 2;
                 obj.tstart = 0;
                 obj.tend = obj.si*(obj.ndata-1);
