@@ -137,9 +137,9 @@ classdef SignalData < handle
                 elseif strcmp(obj.ext,'.cbf')
                     disp(['Loading cbf file ' fname '...'])
                     [~,h]=cbfload(obj.filename,'info');
-                elseif strcmp(obj.ext,'.bin')
-                    disp(['Loading binary file ' fname '...'])
-                    [~,h]=binload(obj.filename,'info');
+                elseif strcmp(obj.ext,'.dbf')
+                    disp(['Loading DataAcquisition dbf file ' fname '...'])
+                    [~,h]=dbfload(obj.filename,'info');
                 elseif strcmp(obj.ext,'.fast5')
                     [~,h]=fast5load(obj.filename,'info');
                 elseif isempty(obj.ext)
@@ -201,14 +201,14 @@ classdef SignalData < handle
                 obj.tstart = 0;
                 obj.tend = obj.si*(obj.ndata-1);
                 obj.nsigs = h.numChan;
-            elseif strcmp(obj.ext,'.bin')
-                % binary version
+            elseif strcmp(obj.ext,'.dbf')
+                % dbf DataAcquisition version
                 
                 obj.si = h.si;
-                obj.ndata = h.numPts - 2;
+                obj.ndata = h.numPts;
                 obj.tstart = 0;
                 obj.tend = obj.si*(obj.ndata-1);
-                obj.nsigs = h.numChan-1;
+                obj.nsigs = h.numChan;
             elseif strcmp(obj.ext,'.fast5')
                 % fast5 version
                 
@@ -665,7 +665,8 @@ classdef SignalData < handle
                 % conservatively load a million points (or more if needed)
                 if (dpt < 1e6)
                     % extend loading range to ~1 million
-                    obj.cstart = round(ptstart - (1e6-dpt)/2);
+                    %obj.cstart = round(ptstart - (1e6-dpt)/2);
+                    obj.cstart = ptstart-10;
                     obj.cend = round(ptend + (1e6-dpt)/2);
                 else
                     % or just by 10 each way to avoid indexing errors etc
@@ -685,9 +686,9 @@ classdef SignalData < handle
                 elseif strcmp(obj.ext, '.cbf')
                     % cbf version
                     d = cbfload(obj.filename,[obj.cstart,(obj.cend+1)]);
-                elseif strcmp(obj.ext, '.bin')
-                    % binary version
-                    d = binload(obj.filename,[obj.cstart,(obj.cend+1)]);
+                elseif strcmp(obj.ext, '.dbf')
+                    % DataAcquisition version
+                    d = dbfload(obj.filename,[obj.cstart,(obj.cend+1)]);
                 elseif strcmp(obj.ext, '.fast5')
                     d = fast5load(obj.filename,[obj.cstart,(obj.cend+1)],obj.header.activeChans);
                 end

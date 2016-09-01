@@ -146,7 +146,7 @@ classdef PoreView < handle
                     fn = fname;
                 end
                 % get a filename from dialog box
-                [FileName,PathName] = uigetfile('*.abf;*.cbf;*.fast5','PoreView',fn);
+                [FileName,PathName] = uigetfile('*.abf;*.cbf;*.fast5;*.dbf','PoreView',fn);
                 % and load (or attempt to)
                 obj.loadFile([PathName FileName]);
             end
