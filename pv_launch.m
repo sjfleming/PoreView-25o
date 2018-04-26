@@ -49,6 +49,9 @@ function pv = pv_launch(s)
                 case 'lp'
                     filtname = sprintf('Low-pass (%d Hz)', param);
                     fsigs = pv.data.addVirtualSignal(@(d) filt_lp(d,4,param),filtname);
+                case 'lpb'
+                    filtname = sprintf('Low-pass Bessel (%d Hz)', param);
+                    fsigs = pv.data.addVirtualSignal(@(d) filt_lpb(d,4,param),filtname);
                 case 'hp'
                     filtname = sprintf('High-pass (%d Hz)', param);
                     fsigs = pv.data.addVirtualSignal(@(d) filt_hp(d,4,param),filtname);
